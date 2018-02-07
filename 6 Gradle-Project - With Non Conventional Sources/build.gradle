@@ -1,0 +1,40 @@
+// Apply the java plugin to add support for Java
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+	mavenCentral()
+}
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+    compile 'org.apache.logging.log4j:log4j-api:2.10.0'
+	compile 'org.apache.logging.log4j:log4j-core:2.10.0'
+	
+    testCompile 'junit:junit:4.12'
+}
+
+jacoco {
+    toolVersion = "0.7.9"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+	}
+	afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: 'build/classes/java/test', include: 'com/oracle/sample/**')
+        })
+    }
+}
+
+test {
+    include 'com/oracle/sample/**'
+	testLogging.showStandardStreams = true
+	finalizedBy jacocoTestReport
+}

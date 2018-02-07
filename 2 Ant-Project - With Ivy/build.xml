@@ -1,0 +1,83 @@
+<project name = "antdemo" basedir = "." default = "build">
+
+<!-- Step 1: Declare all the global variables used in project-->
+
+<property name = "src.dir" value = "src"/>
+<property name = "build.dir" value = "build"/>
+<property name ="report.dir"  value="${build.dir}/junitreport"/>
+
+<!-- Step 2: Clean up build directory if exists-->
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+<!-- Step 3: Compile all source files exclude Exclude.java-->
+
+	<!-- define build classpath-->
+	<path id="build.classpath">
+		<fileset dir="${src.dir}/main/resources">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+	
+	<!-- define build test classpath-->
+	<path id="test.classpath">
+		<pathelement location="${src.dir}/main/resources/junit-4.12.jar"/>
+		<pathelement location="build.classpath" />
+	</path>
+
+    <target name="compile">
+        <mkdir dir="${build.dir}/classes"/>
+        <javac srcdir="${src.dir}" destdir="${build.dir}/classes">
+			<classpath refid="build.classpath"/>
+			<include name="**/main/java/com/sample/*.java"/>
+			<exclude name="**/main/java/com/sample/Exclude.java"/>
+		</javac>
+    </target>
+	
+	<target name="testcompile">
+        <mkdir dir="${build.dir}/testclasses"/>
+    	<javac srcdir="${src.dir}" destdir="${build.dir}/testclasses">
+			<include name="$**/test/java/com/sample/tests/*.java"/>
+			<classpath refid="test.classpath"/>
+		</javac>
+    </target>
+	
+<!-- Step 4: Create a jar of all complied class files and add resources-->
+    <target name="jar">
+        <mkdir dir="${build.dir}/jar"/>
+        <jar destfile="${build.dir}/jar/compute.jar" basedir="${build.dir}/classes">
+            <fileset dir="${build.dir}/classes"/>
+			<fileset dir="${src.dir}/main/resources"/>
+			<manifest>
+                <attribute name="Main-Class" value="com.sample.ComputationMain"/>
+            </manifest>
+        </jar>
+    </target>
+
+<!-- Step 5: Invoke the jar-->
+    <target name="run">
+        <java jar="${build.dir}/jar/compute.jar" 
+		fork="true" failonerror="true">
+			<arg value="${arg0}"/>
+			<arg value="${arg1}"/>
+	    </java>
+		
+    </target>
+	
+<!-- Step 6: Invoke the test cases-->
+	<target name="unittest">
+		<junit printsummary="yes" haltonfailure="yes">
+			<classpath refid="test.classpath"/>
+			<classpath location="${build.dir}/testclasses/*" />
+		<test name="com.sample.tests.ComputationTester"
+             haltonfailure="yes" outfile="result">
+
+			<formatter type="plain"/>
+			<formatter type="xml"/>
+		</test>
+		</junit>		
+   </target>
+	
+</project>
