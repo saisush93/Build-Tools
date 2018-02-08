@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<modelVersion>4.0.0</modelVersion>
+<groupId>com.sample</groupId>
+<artifactId>sample</artifactId>
+<version>1.0.0.0.0</version>
+<packaging>jar</packaging>
+	  
+<build>
+  <sourceDirectory>src/com/sample/base</sourceDirectory>
+  <resources>
+      <resource>
+        <directory>.</directory>
+        <includes>
+          <include>sample.properties</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+  </resources>
+</build>
+	
+	<dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.0</version>
+    </dependency>
+</dependencies>
+</project>
+

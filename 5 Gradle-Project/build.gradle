@@ -28,7 +28,7 @@ jacocoTestReport {
 	}
 	afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: 'build/classes/java/main', include: 'com/oracle/sample/**')
+            fileTree(dir: 'build/classes/java/main', include: 'com/sample/**')
         })
     }
 }
